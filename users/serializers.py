@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import User
-from django.db import IntegrityError
 
 
 class UserSerializer(serializers.Serializer):
@@ -16,16 +15,6 @@ class UserSerializer(serializers.Serializer):
 
     def create(self, validated_data: dict) -> User:
         if validated_data.get("is_employee"):
-            try:
-                return User.objects.create_superuser(**validated_data)
-            except IntegrityError as err:
-                print("OIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
-                print(err)
-                # return err
+            return User.objects.create_superuser(**validated_data)
         else:
-            try:
-                return User.objects.create_user(**validated_data)
-            except IntegrityError as err:
-                print("OI22222222222222222222222222222222222222222")
-                print(err)
-                # return err
+            return User.objects.create_user(**validated_data)
