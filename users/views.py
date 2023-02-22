@@ -14,6 +14,6 @@ class UserView(APIView):
         return Response(serializer.errors, status=400)
 
 
-class UserLoginView(APIView):
+class LoginView(APIView):
     def post(self, request):
         ...
