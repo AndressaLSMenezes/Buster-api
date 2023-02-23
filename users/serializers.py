@@ -5,11 +5,11 @@ from .models import User
 class UserSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     username = serializers.CharField()
-    email = serializers.CharField()
-    password = serializers.CharField(write_only=True)
-    birthdate = serializers.DateField(required=False)
-    first_name = serializers.CharField()
-    last_name = serializers.CharField()
+    email = serializers.CharField(max_length=127)
+    password = serializers.CharField(max_length=127, write_only=True)
+    birthdate = serializers.DateField(allow_null=True, default=None)
+    first_name = serializers.CharField(max_length=50)
+    last_name = serializers.CharField(max_length=50)
     is_employee = serializers.BooleanField(required=False)
     is_superuser = serializers.BooleanField(read_only=True)
 
@@ -18,3 +18,8 @@ class UserSerializer(serializers.Serializer):
             return User.objects.create_superuser(**validated_data)
         else:
             return User.objects.create_user(**validated_data)
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.CharField(max_length=127, write_only=True)
+    password = serializers.CharField(max_length=127, write_only=True)
