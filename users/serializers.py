@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import User
 
+# from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 
 class UserSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
@@ -18,8 +20,3 @@ class UserSerializer(serializers.Serializer):
             return User.objects.create_superuser(**validated_data)
         else:
             return User.objects.create_user(**validated_data)
-
-
-class LoginSerializer(serializers.Serializer):
-    email = serializers.CharField(max_length=127, write_only=True)
-    password = serializers.CharField(max_length=127, write_only=True)
