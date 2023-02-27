@@ -1,13 +1,12 @@
 from rest_framework import serializers
 from .models import User
-
-# from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class UserSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     username = serializers.CharField()
-    email = serializers.CharField(max_length=127)
+    email = serializers.EmailField()
     password = serializers.CharField(max_length=127, write_only=True)
     birthdate = serializers.DateField(allow_null=True, default=None)
     first_name = serializers.CharField(max_length=50)
@@ -20,3 +19,13 @@ class UserSerializer(serializers.Serializer):
             return User.objects.create_superuser(**validated_data)
         else:
             return User.objects.create_user(**validated_data)
+
+
+class CustomJWTSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token["is_superuser"] = user.is_superuser
+        token["email"] = user.email
+
+        return token
