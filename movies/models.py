@@ -16,12 +16,13 @@ class Movie(models.Model):
     rating = models.CharField(max_length=20, choices=Ratings.choices, default=Ratings.G)
     synopsis = models.TextField(blank=True, null=True)
     added_by = models.EmailField()
-    users = models.ManyToManyField(User, through="MovieOrder", related_name="movies")
+    user = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, related_name="movie", null=True
+    )
 
 
 class MovieOrder(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     buyed_at = models.DateTimeField(auto_now_add=True)
-    buyed_by = models.EmailField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
