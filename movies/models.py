@@ -17,7 +17,7 @@ class Movie(models.Model):
     synopsis = models.TextField(blank=True, null=True)
     added_by = models.EmailField()
     user = models.ForeignKey(
-        "users.User", on_delete=models.CASCADE, related_name="movie", null=True
+        "users.User", on_delete=models.CASCADE, related_name="movies", null=True
     )
 
 

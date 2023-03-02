@@ -16,7 +16,6 @@ from django.shortcuts import get_object_or_404
 class MovieView(APIView, PageNumberPagination):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly, IsAdminUser]
-    page_size = 2
 
     def post(self, request):
         serializer = MovieSerializer(data=request.data)
@@ -27,9 +26,9 @@ class MovieView(APIView, PageNumberPagination):
 
     def get(self, request):
         movies = Movie.objects.all()
-        paginated_movies = self.pagination_class.paginate_queryset(movies, request, self)
+        paginated_movies = self.paginate_queryset(movies, request, view=self)
         serializer = MovieSerializer(paginated_movies, many=True)
-        return self.pagination_class.get_paginated_response(serializer.data)
+        return self.get_paginated_response(serializer.data)
 
 
 class MovieDetailView(APIView):
